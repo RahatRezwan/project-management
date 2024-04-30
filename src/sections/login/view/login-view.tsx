@@ -2,16 +2,36 @@
 
 import React, { FC } from 'react';
 import type { FormProps } from 'antd';
-import { Button, Form, Input } from 'antd';
+import { Alert, Button, Form, Input, message } from 'antd';
 
 type FieldType = {
-   username?: string;
+   email?: string;
    password?: string;
 };
 
+const demoAdmin = {
+   email: 'kanbanadmin@gmail.com',
+   password: 'admin@123',
+};
+
 export const LoginPageView: FC = () => {
+   const [messageApi, messageHolder] = message.useMessage();
+
    const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-      console.log('Success:', values);
+      if (
+         values.email?.toLocaleLowerCase() === demoAdmin.email?.toLocaleLowerCase() &&
+         values.password === demoAdmin.password
+      ) {
+         messageApi.open({
+            type: 'success',
+            content: 'Login Success',
+         });
+      } else {
+         messageApi.open({
+            type: 'error',
+            content: 'Login Failed',
+         });
+      }
    };
 
    const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
@@ -20,6 +40,7 @@ export const LoginPageView: FC = () => {
 
    return (
       <div className='flex flex-col justify-center items-center h-[100vh] bg-black text-white'>
+         {messageHolder}
          <h3 className='text-3xl mb-2 font-semibold'>Login</h3>
          <Form
             name='basic'
@@ -35,11 +56,11 @@ export const LoginPageView: FC = () => {
             autoComplete='off'
          >
             <Form.Item<FieldType>
-               label='Username'
-               name='username'
-               rules={[{ required: true, message: 'Please input your username!' }]}
+               label='Email'
+               name='email'
+               rules={[{ required: true, message: 'Please enter your email!' }]}
             >
-               <Input />
+               <Input type='email' />
             </Form.Item>
 
             <Form.Item<FieldType>
