@@ -4,11 +4,8 @@ import React, { FC } from 'react';
 import type { FormProps } from 'antd';
 import { Button, Form, Input, message } from 'antd';
 import { useRouter } from 'next/navigation';
-
-type FieldType = {
-   email?: string;
-   password?: string;
-};
+import { useAuthStore } from 'store/authStore';
+import { IUser } from 'types/user.interface';
 
 const demoAdmin = {
    email: 'kanbanadmin@gmail.com',
@@ -17,9 +14,10 @@ const demoAdmin = {
 
 export const LoginPageView: FC = () => {
    const [messageApi, messageHolder] = message.useMessage();
+   const setUser = useAuthStore((sate) => sate.setUser);
    const router = useRouter();
 
-   const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+   const onFinish: FormProps<IUser>['onFinish'] = (values: IUser) => {
       if (
          values.email?.toLocaleLowerCase() === demoAdmin.email?.toLocaleLowerCase() &&
          values.password === demoAdmin.password
@@ -28,6 +26,7 @@ export const LoginPageView: FC = () => {
             type: 'success',
             content: 'Login Success',
          });
+         setUser(values);
          router.push('/dashboard');
       } else {
          messageApi.open({
@@ -37,7 +36,7 @@ export const LoginPageView: FC = () => {
       }
    };
 
-   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
+   const onFinishFailed: FormProps<IUser>['onFinishFailed'] = (errorInfo) => {
       console.log('Failed:', errorInfo);
    };
 
@@ -56,7 +55,7 @@ export const LoginPageView: FC = () => {
             onFinishFailed={onFinishFailed}
             autoComplete='off'
          >
-            <Form.Item<FieldType>
+            <Form.Item
                label='Email'
                name='email'
                rules={[{ required: true, message: 'Please enter your email!' }]}
@@ -64,7 +63,7 @@ export const LoginPageView: FC = () => {
                <Input type='email' />
             </Form.Item>
 
-            <Form.Item<FieldType>
+            <Form.Item
                label='Password'
                name='password'
                rules={[{ required: true, message: 'Please enter your password!' }]}
