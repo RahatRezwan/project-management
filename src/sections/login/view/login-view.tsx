@@ -2,7 +2,8 @@
 
 import React, { FC } from 'react';
 import type { FormProps } from 'antd';
-import { Alert, Button, Form, Input, message } from 'antd';
+import { Button, Form, Input, message } from 'antd';
+import { useRouter } from 'next/navigation';
 
 type FieldType = {
    email?: string;
@@ -16,6 +17,7 @@ const demoAdmin = {
 
 export const LoginPageView: FC = () => {
    const [messageApi, messageHolder] = message.useMessage();
+   const router = useRouter();
 
    const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
       if (
@@ -26,6 +28,7 @@ export const LoginPageView: FC = () => {
             type: 'success',
             content: 'Login Success',
          });
+         router.push('/dashboard');
       } else {
          messageApi.open({
             type: 'error',
@@ -46,9 +49,7 @@ export const LoginPageView: FC = () => {
             name='basic'
             layout='vertical'
             size='large'
-            // labelCol={{ span: 8 }}
-            // wrapperCol={{ span: 16 }}
-            className='w-full bg-gray-600 bg-opacity-30 rounded-lg p-5 max-w-[400px]'
+            className='w-full bg-gray-600 border border-gray-500 shadow-sm shadow-gray-500 bg-opacity-30 rounded-lg p-5 max-w-[400px]'
             style={{ padding: 20 }}
             initialValues={{ remember: true }}
             onFinish={onFinish}
@@ -66,7 +67,7 @@ export const LoginPageView: FC = () => {
             <Form.Item<FieldType>
                label='Password'
                name='password'
-               rules={[{ required: true, message: 'Please input your password!' }]}
+               rules={[{ required: true, message: 'Please enter your password!' }]}
             >
                <Input.Password />
             </Form.Item>
