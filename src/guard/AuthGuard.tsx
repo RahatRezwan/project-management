@@ -1,9 +1,24 @@
 'use client';
 
-import React from 'react';
+import { redirect } from 'next/navigation';
+import React, { FC } from 'react';
+import { useAuthStore } from 'store/authStore';
 
-const AuthGuard = () => {
-   return <div></div>;
+interface IAuthGuardProps {
+   children?: React.ReactNode;
+}
+
+const AuthGuard: FC<IAuthGuardProps> = ({ children }) => {
+   const { user, authenticated } = useAuthStore((state) => ({
+      user: state.user,
+      authenticated: state.authenticated,
+   }));
+
+   if (!authenticated && !user) {
+      return redirect('/login');
+   }
+
+   return <>{children}</>;
 };
 
 export default AuthGuard;
