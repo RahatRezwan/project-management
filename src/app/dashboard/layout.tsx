@@ -1,4 +1,5 @@
 import AuthGuard from 'guard/AuthGuard';
+import { DashboardWrapper } from 'layouts/DashboardWrapper';
 import { Metadata } from 'next';
 import React, { FC } from 'react';
 
@@ -14,8 +15,7 @@ export const metadata: Metadata = {
 const DashboardLayout: FC<IDashboardLayoutProps> = ({ children }) => {
    return (
       <AuthGuard>
-         <div>Dashboard Layout</div>
-         {children}
+         <DashboardWrapper>{children}</DashboardWrapper>
       </AuthGuard>
    );
 };

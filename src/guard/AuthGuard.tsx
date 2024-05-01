@@ -15,7 +15,7 @@ const AuthGuard: FC<IAuthGuardProps> = ({ children }) => {
    }));
 
    if (!authenticated && !user) {
-      return redirect('/login');
+      return redirect('/');
    }
 
    return <>{children}</>;
